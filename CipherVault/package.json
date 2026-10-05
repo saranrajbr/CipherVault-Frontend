@@ -1,5 +1,5 @@
 {
-  "name": "ciphervault",
+  "name": "cipherforge-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,11 +16,14 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "oxlint": "^1.79.0",
+    "tailwindcss": "^4.3.3",
     "vite": "^8.2.2"
-  }
+  },
+  "description": "CipherForge single-page cryptography toolkit: Encode. Encrypt. Hash."
 }

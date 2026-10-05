@@ -12,6 +12,19 @@ dist
 dist-ssr
 *.local
 
+# Test and tooling output
+coverage/
+test-results/
+playwright-report/
+cypress/screenshots/
+cypress/videos/
+.vercel/
+
+# Environment variables (VITE_* values are inlined into the bundle at build time)
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
