@@ -180,6 +180,57 @@ no input form at all, and the backend independently rejects DES requests.
 
 ---
 
+## Deployment
+
+Deployed on Vercel as a static Vite build:
+
+- **Production URL:** <https://ciphervault-frontend-self.vercel.app>
+- **Backend:** <https://ciphervault-backend.vercel.app> (separate Vercel project)
+
+### Repository layout and the deploy directory
+
+This repository holds the app in a subdirectory, `CipherVault/`. Vercel is run
+**from that directory** so it becomes the deployment root:
+
+```bash
+cd CipherVault
+vercel deploy --prod --yes
+```
+
+Running from the repository root instead makes Vercel derive an invalid
+project name from `CipherVault-Frontend` (uppercase is not permitted). Note
+that `rootDirectory` is *not* a valid `vercel.json` property — it can only be
+set in project settings, so the working directory is what matters.
+
+### Environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_API_BASE_URL` | Absolute backend origin. Empty in local development, where the Vite proxy forwards `/api` instead. |
+
+`VITE_*` values are inlined into the bundle **at build time**, so the variable
+must exist before the build runs:
+
+```bash
+vercel env add VITE_API_BASE_URL production
+# https://ciphervault-backend.vercel.app
+
+vercel deploy --prod --yes
+```
+
+The backend separately needs `CORS_ORIGINS` set to this project's origin,
+otherwise the browser blocks the cross-origin requests.
+
+### Redeploying after a change
+
+Pushes are not wired to automatic deploys, so redeploy explicitly:
+
+```bash
+cd CipherVault && vercel deploy --prod --yes
+```
+
+---
+
 ## Accessibility
 
 - Semantic landmarks: `header`, `nav`, `main`, `footer`.
