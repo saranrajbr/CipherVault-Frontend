@@ -189,18 +189,32 @@ Deployed on Vercel as a static Vite build:
 
 ### Repository layout and the deploy directory
 
-This repository holds the app in a subdirectory, `CipherVault/`. Vercel is run
-**from that directory** so it becomes the deployment root:
+This repository holds the app in a subdirectory, `CipherVault/`, so the Vite
+`package.json` is not at the root. `vercel.json` therefore lives at the
+**repository root** and steps into the subdirectory:
 
-```bash
-cd CipherVault
-vercel deploy --prod --yes
+```json
+{
+  "installCommand": "cd CipherVault && npm install",
+  "buildCommand": "cd CipherVault && npm run build",
+  "outputDirectory": "CipherVault/dist"
+}
 ```
 
-Running from the repository root instead makes Vercel derive an invalid
-project name from `CipherVault-Frontend` (uppercase is not permitted). Note
-that `rootDirectory` is *not* a valid `vercel.json` property — it can only be
-set in project settings, so the working directory is what matters.
+This matters because Vercel has two ways in:
+
+| Trigger | Working directory |
+| --- | --- |
+| Git push (integration) | always the repository root |
+| `vercel deploy` (CLI) | wherever you invoke it |
+
+Putting the config in `CipherVault/` made CLI deploys work while every push
+failed with `npm error ENOENT ... /vercel/path0/package.json`. Keeping one
+config at the root makes both paths identical.
+
+Note that `rootDirectory` is *not* a valid `vercel.json` property — only the
+commands and output directory are, so `cd` inside `buildCommand` is the
+mechanism that works.
 
 ### Environment variables
 
@@ -223,11 +237,21 @@ otherwise the browser blocks the cross-origin requests.
 
 ### Redeploying after a change
 
-Pushes are not wired to automatic deploys, so redeploy explicitly:
+**Pushes deploy automatically.** The GitHub repository is connected to Vercel,
+so a push to `main` builds and promotes itself to production:
 
 ```bash
-cd CipherVault && vercel deploy --prod --yes
+git push origin main          # triggers a production build
 ```
+
+Manual deploys still work and use the same `vercel.json`:
+
+```bash
+vercel deploy --prod --yes    # from the repository root
+```
+
+To preview a change without publishing it, deploy with `--preview` instead of
+`--prod`.
 
 ---
 
