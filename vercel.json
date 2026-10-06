@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "installCommand": "cd CipherVault && npm install",
+  "buildCommand": "cd CipherVault && npm run build",
+  "outputDirectory": "CipherVault/dist",
   "rewrites": [
     {
       "source": "/(.*)",
